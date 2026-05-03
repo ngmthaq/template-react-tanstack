@@ -4,10 +4,10 @@ module.exports.createHook = function (hookName) {
   const fs = require("fs");
   const path = require("path");
 
-  const hooksDir = path.join(__dirname, "..", "src", "hooks");
+  const hooksDir = path.join(__dirname, "..", "src", "hooks", "common");
 
   if (!fs.existsSync(hooksDir)) {
-    fs.mkdirSync(hooksDir);
+    fs.mkdirSync(hooksDir, { recursive: true });
   }
 
   const hookFilePath = path.join(hooksDir, `${hookName}.ts`);

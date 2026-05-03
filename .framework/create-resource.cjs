@@ -22,9 +22,26 @@ if (!resourceList.includes(resourceType)) {
   console.error(`🛑 Invalid resource type.`);
   console.error(`🛑 Please choose from: ${resourceList.join(", ")}`);
   process.exit(1);
-} else if (resourceType === "component" && resourceName) {
-  const { createComponent } = require("./create-component.cjs");
-  createComponent(resourceName);
+} else if (resourceType === "component") {
+  const atomicLevel = args[1];
+  const componentName = args[2];
+  const {
+    VALID_ATOMIC_LEVELS: validAtomicLevels,
+  } = require("./create-component.cjs");
+  if (!atomicLevel || !validAtomicLevels.includes(atomicLevel)) {
+    console.error(`🛑 Invalid or missing atomic level.`);
+    console.error(`🛑 Valid levels: ${validAtomicLevels.join(", ")}`);
+    process.exit(1);
+  } else if (componentName) {
+    const { createComponent } = require("./create-component.cjs");
+    createComponent(atomicLevel, componentName);
+  } else {
+    console.error(`🛑 Missing component name.`);
+    console.error(
+      `Usage: node .framework/create-resource.cjs component {atomicLevel} {ComponentName}`,
+    );
+    process.exit(1);
+  }
 } else if (resourceType === "view" && resourceName) {
   const { createView } = require("./create-view.cjs");
   createView(resourceName);

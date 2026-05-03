@@ -8,10 +8,10 @@ module.exports.createMutation = function (mutationName) {
   const fs = require("fs");
   const path = require("path");
 
-  const mutationsDir = path.join(__dirname, "..", "src", "mutations");
+  const mutationsDir = path.join(__dirname, "..", "src", "hooks", "mutations");
 
   if (!fs.existsSync(mutationsDir)) {
-    fs.mkdirSync(mutationsDir);
+    fs.mkdirSync(mutationsDir, { recursive: true });
   }
 
   const camelCaseName = toCamelCase(mutationName);

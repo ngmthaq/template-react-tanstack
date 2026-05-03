@@ -8,10 +8,10 @@ module.exports.createStore = function (storeName) {
   const fs = require("fs");
   const path = require("path");
 
-  const storesDir = path.join(__dirname, "..", "src", "stores");
+  const storesDir = path.join(__dirname, "..", "src", "hooks", "stores");
 
   if (!fs.existsSync(storesDir)) {
-    fs.mkdirSync(storesDir);
+    fs.mkdirSync(storesDir, { recursive: true });
   }
 
   const storeFileName = `use${storeName}Store`;

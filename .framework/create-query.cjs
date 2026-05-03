@@ -8,10 +8,10 @@ module.exports.createQuery = function (queryName) {
   const fs = require("fs");
   const path = require("path");
 
-  const queriesDir = path.join(__dirname, "..", "src", "queries");
+  const queriesDir = path.join(__dirname, "..", "src", "hooks", "queries");
 
   if (!fs.existsSync(queriesDir)) {
-    fs.mkdirSync(queriesDir);
+    fs.mkdirSync(queriesDir, { recursive: true });
   }
 
   const queryFileName = `use${queryName}`;

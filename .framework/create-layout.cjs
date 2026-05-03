@@ -4,10 +4,17 @@ module.exports.createLayout = function (layoutName) {
   const fs = require("fs");
   const path = require("path");
 
-  const layoutDir = path.join(__dirname, "..", "src", "layouts", layoutName);
+  const layoutDir = path.join(
+    __dirname,
+    "..",
+    "src",
+    "components",
+    "templates",
+    layoutName,
+  );
 
   if (!fs.existsSync(layoutDir)) {
-    fs.mkdirSync(layoutDir);
+    fs.mkdirSync(layoutDir, { recursive: true });
   }
 
   const layoutFileContent = `

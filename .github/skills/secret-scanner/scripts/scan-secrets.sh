@@ -66,14 +66,6 @@ severity_color() {
 }
 RESET='\033[0m'
 
-# Simple timestamped console logger for loop iterations and info
-log_msg() {
-  local msg="$1"
-  local ts
-  ts=$(date --iso-8601=seconds 2>/dev/null || date +"%Y-%m-%dT%H:%M:%S%z")
-  printf '%s\t%s\n' "$ts" "$msg"
-}
-
 report() {
   local name="$1" severity="$2" location="$3" match="$4"
   local color
@@ -88,7 +80,6 @@ scan_line() {
   local line="$1" location="$2"
   for entry in "${PATTERNS[@]}"; do
     IFS='|' read -r name severity regex <<< "$entry"
-    log_msg "scan_line: checking pattern=${name} location=${location}"
     if echo "$line" | grep -qE "$regex" 2>/dev/null; then
       local match
       match=$(echo "$line" | grep -oE "$regex" | head -1)
@@ -102,10 +93,8 @@ scan_files() {
   for file in "$@"; do
     [[ -f "$file" ]] || { echo "Skipping (not a file): $file"; continue; }
     local lineno=0
-    log_msg "scan_files: starting file=${file}"
     while IFS= read -r line; do
       lineno=$((lineno + 1))
-      log_msg "scan_files: file=${file} lineno=${lineno}"
       scan_line "$line" "$file:$lineno"
     done < "$file"
   done
@@ -119,19 +108,16 @@ scan_diff() {
     if [[ "$line" =~ ^\+\+\+\ b/(.+)$ ]]; then
       current_file="${BASH_REMATCH[1]}"
       lineno=0
-      log_msg "scan_diff: switched to file=${current_file}"
       continue
     fi
     # Track line numbers from hunk headers: @@ -a,b +c,d @@
     if [[ "$line" =~ ^@@\ [^+]*\+([0-9]+) ]]; then
       lineno=$(( BASH_REMATCH[1] - 1 ))
-      log_msg "scan_diff: hunk start lineno=${lineno} for file=${current_file}"
       continue
     fi
     # Only scan added lines
     if [[ "$line" =~ ^\+ && ! "$line" =~ ^\+\+\+ ]]; then
       lineno=$((lineno + 1))
-      log_msg "scan_diff: added line ${current_file}:${lineno}"
       scan_line "${line:1}" "$current_file:$lineno"
     elif [[ ! "$line" =~ ^- ]]; then
       lineno=$((lineno + 1))

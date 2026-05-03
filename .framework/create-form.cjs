@@ -4,10 +4,10 @@ module.exports.createForm = function (formName) {
   const fs = require("fs");
   const path = require("path");
 
-  const formsDir = path.join(__dirname, "..", "src", "forms");
+  const formsDir = path.join(__dirname, "..", "src", "hooks", "forms");
 
   if (!fs.existsSync(formsDir)) {
-    fs.mkdirSync(formsDir);
+    fs.mkdirSync(formsDir, { recursive: true });
   }
 
   const formFileName = `use${formName}Form`;

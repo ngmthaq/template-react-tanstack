@@ -4,10 +4,17 @@ module.exports.createView = function (viewName) {
   const fs = require("fs");
   const path = require("path");
 
-  const viewDir = path.join(__dirname, "..", "src", "views", viewName);
+  const viewDir = path.join(
+    __dirname,
+    "..",
+    "src",
+    "components",
+    "pages",
+    viewName,
+  );
 
   if (!fs.existsSync(viewDir)) {
-    fs.mkdirSync(viewDir);
+    fs.mkdirSync(viewDir, { recursive: true });
   }
 
   const viewFileContent = `
