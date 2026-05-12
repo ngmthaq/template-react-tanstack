@@ -1,8 +1,14 @@
+import { CircularProgress } from "@mui/material";
+import { Backdrop } from "./styled";
+
 export interface AppLoadingProps {
-  exampleProp?: string;
+  open?: boolean;
 }
 
-export function AppLoading({ exampleProp }: AppLoadingProps) {
-  console.log(exampleProp);
-  return <div>AppLoading component works!</div>;
+export function AppLoading({ open = true }: AppLoadingProps) {
+  return (
+    <Backdrop $open={open}>
+      <CircularProgress />
+    </Backdrop>
+  );
 }

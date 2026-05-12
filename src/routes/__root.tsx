@@ -3,6 +3,7 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import {
   AppAgGridProvider,
   AppLocalizationProvider,
+  AppNotificationProvider,
   AppQueryProvider,
   AppStoreProvider,
   AppThemeProvider,
@@ -18,10 +19,12 @@ function RootComponent() {
       <AppLocalizationProvider>
         <AppQueryProvider>
           <AppThemeProvider>
-            <AppAgGridProvider>
-              <Outlet />
-              <TanStackRouterDevtools position="bottom-right" />
-            </AppAgGridProvider>
+            <AppNotificationProvider>
+              <AppAgGridProvider>
+                <Outlet />
+                <TanStackRouterDevtools position="bottom-right" />
+              </AppAgGridProvider>
+            </AppNotificationProvider>
           </AppThemeProvider>
         </AppQueryProvider>
       </AppLocalizationProvider>

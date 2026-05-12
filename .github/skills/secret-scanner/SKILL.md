@@ -75,47 +75,9 @@ path/to/skills/scripts/scan-secrets.sh path/to/file.env path/to/config.py
 
 ---
 
-## Detection Coverage
-
-| Category                            | Severity        | Examples                                                             |
-| ----------------------------------- | --------------- | -------------------------------------------------------------------- |
-| AWS credentials                     | critical        | `AKIA…` access keys, secret access keys                              |
-| GCP credentials                     | critical / high | Service account JSON, API keys (`AIza…`)                             |
-| Azure secrets                       | critical        | Client secrets                                                       |
-| GitHub tokens                       | critical        | `ghp_`, `gho_`, `ghs_`, `ghr_`, `github_pat_`                        |
-| Private keys                        | critical        | RSA, EC, OPENSSH, DSA, PGP private key blocks                        |
-| Stripe keys                         | critical / high | `sk_live_`, `rk_live_`                                               |
-| Generic secrets                     | high            | `password`, `api_key`, `auth_token`, etc. with quoted literal values |
-| Connection strings                  | high            | `postgres://`, `mongodb://`, `redis://`, etc. with credentials       |
-| Slack / Discord / Twilio / SendGrid | high            | Service-specific token formats                                       |
-| npm tokens                          | high            | `npm_…`                                                              |
-| Bearer / JWT tokens                 | medium          | `Bearer …`, `eyJ…` JWTs                                              |
-| Internal IPs with ports             | medium          | RFC-1918 addresses with port numbers                                 |
-
----
-
 ## Enforcement Rules
 
 - Any detected secret **must** be treated as a critical security issue.
 - Output always includes: secret type, file path and line number, severity, and remediation guidance.
 - **Do not mark code as secure** until all critical and high-severity findings are resolved.
 - Remediation: remove the hardcoded value and replace with an environment variable or secrets manager reference (e.g. AWS Secrets Manager, HashiCorp Vault, GitHub Actions secrets).
-
----
-
-## CI/CD Integration
-
-### GitHub Actions (pre-merge)
-
-```yaml
-- name: Scan secrets in PR diff
-  run: |
-    git diff origin/${{ github.base_ref }}...HEAD | path/to/skills/scripts/scan-secrets.sh --diff
-```
-
-### Pre-commit hook
-
-```bash
-# .git/hooks/pre-commit
-git diff --cached | path/to/skills/scripts/scan-secrets.sh --diff
-```

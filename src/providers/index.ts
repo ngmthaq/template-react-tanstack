@@ -16,3 +16,6 @@ export * from "./AppStoreProvider/store";
 
 // AppAgGridProvider
 export * from "./AppAgGridProvider";
+
+// AppNotificationProvider
+export * from "./AppNotificationProvider";
